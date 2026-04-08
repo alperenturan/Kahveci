@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kahve Takip | Coffee Tracker</title>
+    <title>Kahve Takip | Coffee Tracker V2</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
 </head>
 <body class="dark-mode">
     <div class="container" id="main-container">
-        <!-- Registration Screen (Hidden by default if name exists) -->
+        <!-- Registration Screen -->
         <div id="registration-screen" class="screen hidden">
             <header>
                 <div class="icon">☕</div>
@@ -32,6 +32,9 @@
             <header>
                 <div class="status-bar">
                     <button class="settings-btn" id="open-settings">⚙️</button>
+                    <div class="balance-badge hidden" id="balance-badge">
+                        Kalan Hak: <span id="user-quota">...</span>
+                    </div>
                     <button class="qr-btn" id="open-qr">📱 QR</button>
                 </div>
                 <h2 id="welcome-msg">Hoş geldin!</h2>
@@ -44,7 +47,6 @@
                         <span class="type">Sade Kahve</span>
                         <span class="price">40 TL</span>
                     </div>
-                    <div class="btn-hover-effect"></div>
                 </button>
 
                 <button class="coffee-btn highlighted" data-type="Sütlü Kahve" data-price="50">
@@ -52,7 +54,6 @@
                         <span class="type">Sütlü Kahve</span>
                         <span class="price">50 TL</span>
                     </div>
-                    <div class="btn-hover-effect"></div>
                 </button>
             </div>
 
@@ -61,13 +62,27 @@
             </div>
         </div>
 
-        <!-- Success Overlay (Shown after click) -->
-        <div id="success-overlay" class="overlay hidden">
-            <div class="overlay-content">
+        <!-- Success Success Modal (BiP Payment Info) -->
+        <div id="payment-modal" class="overlay hidden">
+            <div class="overlay-content payment-card">
                 <div class="checkmark">✓</div>
-                <h3>Kaydedildi!</h3>
-                <p>Afiyet olsun 😊</p>
-                <p class="timer-hint">Bu ekran <span id="timer-sec">3</span> saniye sonra kapanacak.</p>
+                <h3>Kahven Kaydedildi!</h3>
+                <p class="afiyet">Afiyet olsun 😊</p>
+                
+                <div class="payment-info">
+                    <p class="pay-title">Bakiye Yükleme ve Ödeme</p>
+                    <div class="person-card">
+                        <p class="person-name">Özge Nur Geldi Büber</p>
+                        <div class="phone-box" id="copy-phone">
+                            <span class="phone-num">0532 210 9021</span>
+                            <span class="copy-icon">📋</span>
+                        </div>
+                        <p class="bip-note">Parayı <strong>BİP</strong> üzerinden atabilirsiniz.</p>
+                    </div>
+                </div>
+
+                <button id="close-payment" class="btn primary-btn" style="width: 100%; margin-top: 20px;">Tamam</button>
+                <p class="auto-close">Bu ekran <span id="payment-timer">10</span> sn içinde kapanacak.</p>
             </div>
         </div>
 

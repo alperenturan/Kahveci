@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yazdıralabilir QR Kod | Kahve Takip</title>
+    <title>Yazdıralabilir QR Kod | Kahve Takip V2</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background: white; color: black; }
-        .print-container { border: 2px dashed #ccc; padding: 40px; display: inline-block; border-radius: 20px; }
-        h1 { margin-bottom: 5px; }
-        p { color: #666; margin-bottom: 30px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 40px; background: white; color: black; }
+        .print-container { border: 2px dashed #ccc; padding: 40px; display: inline-block; border-radius: 20px; max-width: 400px; }
+        h1 { margin-bottom: 5px; font-size: 2.2rem; }
+        p { color: #666; margin-bottom: 25px; font-size: 1.1rem; }
         #qrcode { margin: 20px auto; display: flex; justify-content: center; }
-        .price-tag { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
-        .btn-print { margin-top: 40px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .back-link { margin-top: 20px; display: block; color: #666; text-decoration: none; }
-        @media print { .btn-print, .back-link { display: none; } .print-container { border: none; } }
+        
+        .price-section { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .price-row { font-weight: bold; font-size: 1.4rem; color: #1a1a1a; margin-bottom: 5px; }
+        .price-sub { font-size: 1rem; color: #444; margin-bottom: 15px; }
+        
+        .payment-footer { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; color: #333; }
+        .phone { font-weight: bold; color: #000; display: block; margin-bottom: 4px; }
+        
+        .btn-print { margin-top: 40px; padding: 12px 24px; background: #333; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .back-link { margin-top: 25px; display: block; color: #888; text-decoration: none; font-size: 0.9rem; }
+        
+        @media print { 
+            .btn-print, .back-link { display: none; } 
+            .print-container { border: none; padding: 0; }
+            body { padding: 0; }
+        }
     </style>
 </head>
 <body>
@@ -24,8 +36,14 @@
         
         <div id="qrcode"></div>
         
-        <div class="price-tag">
-            Sade: 40 TL | Sütlü: 50 TL
+        <div class="price-section">
+            <div class="price-row">10 Kahve: 350 TL</div>
+            <div class="price-sub">1 Kahve: 40 TL</div>
+        </div>
+
+        <div class="payment-footer">
+            <span class="phone">0532 210 9021</span>
+            numaralı hatta <strong>BiP</strong> üzerinden para atabilirsiniz.
         </div>
     </div>
 

@@ -7,8 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveProfileBtn = document.getElementById('save-profile-btn');
     const changeProfileBtn = document.getElementById('change-profile-btn');
     const coffeeBtns = document.querySelectorAll('.coffee-btn');
-    const successOverlay = document.getElementById('success-overlay');
-    const timerSec = document.getElementById('timer-sec');
+    
+    // New V2 Elements
+    const balanceBadge = document.getElementById('balance-badge');
+    const userQuotaSpan = document.getElementById('user-quota');
+    const paymentModal = document.getElementById('payment-modal');
+    const paymentTimerSpan = document.getElementById('payment-timer');
+    const closePaymentBtn = document.getElementById('close-payment');
+    const copyPhoneBtn = document.getElementById('copy-phone');
     
     const settingsModal = document.getElementById('settings-modal');
     const openSettingsBtn = document.getElementById('open-settings');
@@ -19,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State
     let userName = localStorage.getItem('coffee_userName');
-    // Google'dan alınan YENİ Web App URL'si buraya eklendi
     let sheetUrl = 'https://script.google.com/macros/s/AKfycbxHrd-yB2okadNhOEgRxVNh7EffEA4ZK2BBPwOlkBNIPUoR4aDcP7BqujEHlJA20i161Q/exec';
 
     // Init Page
     const init = () => {
         if (userName) {
             showSelectionScreen();
+            fetchUserQuota(); // Load balance on start
         } else {
             showRegistrationScreen();
         }
@@ -40,7 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
         regScreen.classList.add('hidden');
         selScreen.classList.remove('hidden');
         welcomeMsg.textContent = `Hoş geldin ${userName}!`;
-        sheetUrlInput.value = sheetUrl || '';
+    };
+
+    // Fetch Quota from Google Sheets
+    const fetchUserQuota = async () => {
+        if (!userName || !sheetUrl) return;
+        
+        try {
+            // Google Apps Script doGet used here
+            // Note: Cloud functions often need a proxy or handle CORS specially. 
+            // We use the same URL but with GET params.
+            const response = await fetch(`${sheetUrl}?name=${encodeURIComponent(userName)}`);
+            const quota = await response.text();
+            
+            if (quota && !isNaN(quota)) {
+                userQuotaSpan.textContent = quota;
+                balanceBadge.classList.remove('hidden');
+            }
+        } catch (err) {
+            console.error('Quota Fetch Error:', err);
+        }
     };
 
     // Actions
@@ -50,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userName = name;
             localStorage.setItem('coffee_userName', name);
             showSelectionScreen();
+            fetchUserQuota();
         } else {
             alert('Lütfen ismini girer misin?');
         }
@@ -60,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('coffee_userName');
             userName = null;
             showRegistrationScreen();
+            balanceBadge.classList.add('hidden');
         }
     });
 
@@ -72,10 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const logCoffee = async (type, price) => {
-        // 1. Başarı ekranını hemen göster
-        showSuccessOverlay();
+        // 1. Show Payment Modal
+        showPaymentModal();
 
-        // 2. Veriyi hazırla
+        // 2. Prepare Data
         const logData = {
             name: userName,
             coffeeType: type,
@@ -83,56 +110,71 @@ document.addEventListener('DOMContentLoaded', () => {
             timestamp: new Date().toLocaleString('tr-TR')
         };
 
-        console.log('Veri gönderiliyor:', logData);
-
-        // 3. Google Sheets'e gönder
-        if (sheetUrl && sheetUrl.startsWith('http')) {
-            // Google Apps Script için en güvenli yöntem veriyi text/plain olarak 
-            // ama JSON formatında göndermektir (CORS hatalarını önlemek için)
+        // 3. Send to Google Sheets
+        if (sheetUrl) {
             fetch(sheetUrl, {
                 method: 'POST',
                 mode: 'no-cors',
                 cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(logData)
-            })
-            .then(() => {
-                console.log('Google Sheets mesajı gönderildi (no-cors mode)');
-            })
-            .catch(err => {
-                console.error('Gönderim sırasında hata oluştu:', err);
-                alert('Veri gönderilemedi, lütfen internetinizi kontrol edin.');
+            }).then(() => {
+                // Update quota locally after a short delay to allow background processing
+                setTimeout(fetchUserQuota, 2000);
             });
-        } else {
-            alert('Google Sheet bağlantısı kurulmamış. Ayarları kontrol edin.');
         }
     };
 
-    const showSuccessOverlay = () => {
-        successOverlay.classList.remove('hidden');
-        let timeLeft = 3;
-        timerSec.textContent = timeLeft;
+    const showPaymentModal = () => {
+        paymentModal.classList.remove('hidden');
+        let timeLeft = 10;
+        paymentTimerSpan.textContent = timeLeft;
         
         const countdown = setInterval(() => {
             timeLeft--;
-            timerSec.textContent = timeLeft;
+            paymentTimerSpan.textContent = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(countdown);
-                successOverlay.classList.add('hidden');
+                closeModal();
             }
         }, 1000);
+
+        // Store interval to clear if manually closed
+        paymentModal.dataset.intervalId = countdown;
     };
+
+    const closeModal = () => {
+        paymentModal.classList.add('hidden');
+        if (paymentModal.dataset.intervalId) {
+            clearInterval(paymentModal.dataset.intervalId);
+        }
+    };
+
+    closePaymentBtn.addEventListener('click', closeModal);
+
+    // Copy Phone Number
+    copyPhoneBtn.addEventListener('click', () => {
+        const phone = "05322109021";
+        navigator.clipboard.writeText(phone).then(() => {
+            const originalText = copyPhoneBtn.innerHTML;
+            copyPhoneBtn.innerHTML = "Kopyalandı! ✅";
+            setTimeout(() => {
+                copyPhoneBtn.innerHTML = originalText;
+            }, 2000);
+        });
+    });
 
     // Settings
     openSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
     closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
     saveSettingsBtn.addEventListener('click', () => {
-        sheetUrl = sheetUrlInput.value.trim();
-        localStorage.setItem('coffee_sheetUrl', sheetUrl);
+        const newUrl = sheetUrlInput.value.trim();
+        if (newUrl) {
+            sheetUrl = newUrl;
+            localStorage.setItem('coffee_sheetUrl', sheetUrl);
+            alert('URL Güncellendi!');
+        }
         settingsModal.classList.add('hidden');
-        alert('URL Kaydedildi!');
     });
 
     // QR Page

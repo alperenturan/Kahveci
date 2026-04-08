@@ -260,6 +260,89 @@ input[type="text"]:focus {
     font-size: 0.85rem;
 }
 
+/* V2 New Styles */
+.balance-badge {
+    background: var(--accent);
+    color: var(--primary-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--primary-color);
+    animation: fadeIn 0.5s ease;
+}
+
+.payment-card {
+    background: linear-gradient(145deg, #1e1e1e, #121212);
+    border: 1px solid var(--glass-border);
+    padding: 40px 30px;
+    border-radius: 32px;
+    width: 90%;
+    max-width: 380px;
+}
+
+.afiyet {
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    color: var(--text-dim);
+}
+
+.payment-info {
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.pay-title {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.person-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.phone-box {
+    background: var(--glass);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    border: 1px dashed var(--glass-border);
+    transition: all 0.2s;
+}
+
+.phone-box:active {
+    background: var(--primary-color);
+    color: black;
+}
+
+.phone-num {
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+
+.bip-note {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+}
+
+.auto-close {
+    font-size: 0.8rem;
+    margin-top: 15px;
+    opacity: 0.5;
+}
+
 /* Modal */
 .modal {
     position: fixed;
