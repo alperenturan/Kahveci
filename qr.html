@@ -52,9 +52,16 @@
     <a href="index.html" class="back-link">← Uygulamaya Dön</a>
 
     <script>
-        // Get current URL but normalize it to index.html
-        let currentUrl = window.location.href.split('qr.html')[0] + 'index.html';
+        // Daha güvenilir URL oluşturma (GitHub Pages ve yerel uyumlu)
+        let currentUrl;
+        try {
+            // qr.html dosyasını çıkarıp yerine index.html koyar
+            currentUrl = window.location.href.replace(/qr\.html(#.*)?(\?.*)?$/, 'index.html');
+        } catch(e) {
+            currentUrl = window.location.origin + window.location.pathname.replace('qr.html', 'index.html');
+        }
         
+        // QR kodunu oluştur
         new QRCode(document.getElementById("qrcode"), {
             text: currentUrl,
             width: 256,
@@ -63,6 +70,9 @@
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
+
+        // Debug: Gidilen adresi altta göster (Sadece kontrol için)
+        console.log("QR Hedefi:", currentUrl);
     </script>
 </body>
 </html>
