@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State
     let userName = localStorage.getItem('coffee_userName');
-    let sheetUrl = localStorage.getItem('coffee_sheetUrl') || 'https://script.google.com/macros/s/AKfycbxHrd-yB2okadNhOEgRxVNh7EffEA4ZK2BBPwOlkBNIPUoR4aDcP7BqujEHlJA20i161Q/exec';
+    let sheetUrl = localStorage.getItem('coffee_sheetUrl') || 'https://script.google.com/macros/s/AKfycbwDaKjnjP7jAkgyDqiMr9DMRfyoZNfpowVLA7OKLO_9OcLw6zUBvFPGpvTk6k9vbKy9yw/exec';
 
     if (userName) userName = userName.trim();
 
