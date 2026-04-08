@@ -54,15 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchUserQuota = async () => {
         if (!userName || !sheetUrl) return;
         
-        // Yükleniyor durumunu göster
         balanceBadge.classList.remove('hidden');
         userQuotaSpan.textContent = '...';
         
         try {
-            const response = await fetch(`${sheetUrl}?name=${encodeURIComponent(userName)}`);
+            // URL zaten bir ? içeriyorsa & ile, içermiyorsa ? ile parametre ekle
+            const separator = sheetUrl.includes('?') ? '&' : '?';
+            const finalUrl = `${sheetUrl}${separator}name=${encodeURIComponent(userName)}&t=${Date.now()}`;
+            
+            const response = await fetch(finalUrl);
             const quota = await response.text();
             
-            // Sıfır dahil her rakamı göster
             if (quota !== null && quota !== undefined) {
                 userQuotaSpan.textContent = quota;
             }
