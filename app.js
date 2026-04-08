@@ -50,28 +50,34 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeMsg.textContent = `Hoş geldin ${userName}!`;
     };
 
-    // Fetch Quota from Google Sheets
-    const fetchUserQuota = async () => {
+    // Fetch Quota from Google Sheets (JSONP version for better mobile compatibility)
+    const fetchUserQuota = () => {
         if (!userName || !sheetUrl) return;
         
         balanceBadge.classList.remove('hidden');
         userQuotaSpan.textContent = '...';
         
-        try {
-            // URL zaten bir ? içeriyorsa & ile, içermiyorsa ? ile parametre ekle
-            const separator = sheetUrl.includes('?') ? '&' : '?';
-            const finalUrl = `${sheetUrl}${separator}name=${encodeURIComponent(userName)}&t=${Date.now()}`;
-            
-            const response = await fetch(finalUrl);
-            const quota = await response.text();
-            
-            if (quota !== null && quota !== undefined) {
-                userQuotaSpan.textContent = quota;
+        const callbackName = 'callback_' + Math.round(Math.random() * 1000000);
+        const separator = sheetUrl.includes('?') ? '&' : '?';
+        const finalUrl = `${sheetUrl}${separator}name=${encodeURIComponent(userName)}&callback=${callbackName}&t=${Date.now()}`;
+        
+        // JSONP Callback handler
+        window[callbackName] = (data) => {
+            if (data !== null && data !== undefined) {
+                userQuotaSpan.textContent = data;
             }
-        } catch (err) {
-            console.error('Quota Fetch Error:', err);
+            delete window[callbackName];
+            document.body.removeChild(script);
+        };
+
+        // Create script tag
+        const script = document.createElement('script');
+        script.src = finalUrl;
+        script.onerror = () => {
             userQuotaSpan.textContent = 'Hata';
-        }
+            balanceBadge.classList.remove('hidden');
+        };
+        document.body.appendChild(script);
     };
 
     // Actions
