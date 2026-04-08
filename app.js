@@ -52,19 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchUserQuota = async () => {
         if (!userName || !sheetUrl) return;
         
+        // Yükleniyor durumunu göster
+        balanceBadge.classList.remove('hidden');
+        userQuotaSpan.textContent = '...';
+        
         try {
-            // Google Apps Script doGet used here
-            // Note: Cloud functions often need a proxy or handle CORS specially. 
-            // We use the same URL but with GET params.
             const response = await fetch(`${sheetUrl}?name=${encodeURIComponent(userName)}`);
             const quota = await response.text();
             
-            if (quota && !isNaN(quota)) {
+            // Sıfır dahil her rakamı göster
+            if (quota !== null && quota !== undefined) {
                 userQuotaSpan.textContent = quota;
-                balanceBadge.classList.remove('hidden');
             }
         } catch (err) {
             console.error('Quota Fetch Error:', err);
+            userQuotaSpan.textContent = 'Hata';
         }
     };
 
