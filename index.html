@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahve Takip | Coffee Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="container" id="main-container">
+        <!-- Registration Screen (Hidden by default if name exists) -->
+        <div id="registration-screen" class="screen hidden">
+            <header>
+                <div class="icon">☕</div>
+                <h1>Merhaba!</h1>
+                <p>Başlamadan önce adını öğrenebilir miyiz?</p>
+            </header>
+            <div class="form-group">
+                <input type="text" id="user-name-input" placeholder="Adınız ve Soyadınız" autocomplete="name">
+                <button id="save-profile-btn" class="btn primary-btn">Profilimi Kaydet</button>
+            </div>
+            <footer>
+                <p>Bu isim bir kez sorulacak ve telefonuna kaydedilecek.</p>
+            </footer>
+        </div>
+
+        <!-- Coffee Selection Screen -->
+        <div id="selection-screen" class="screen hidden">
+            <header>
+                <div class="status-bar">
+                    <button class="settings-btn" id="open-settings">⚙️</button>
+                    <button class="qr-btn" id="open-qr">📱 QR</button>
+                </div>
+                <h2 id="welcome-msg">Hoş geldin!</h2>
+                <p>Bugün hangi kahveyi içiyoruz?</p>
+            </header>
+            
+            <div class="coffee-options">
+                <button class="coffee-btn" data-type="Sade Kahve" data-price="40">
+                    <div class="coffee-content">
+                        <span class="type">Sade Kahve</span>
+                        <span class="price">40 TL</span>
+                    </div>
+                    <div class="btn-hover-effect"></div>
+                </button>
+
+                <button class="coffee-btn highlighted" data-type="Sütlü Kahve" data-price="50">
+                    <div class="coffee-content">
+                        <span class="type">Sütlü Kahve</span>
+                        <span class="price">50 TL</span>
+                    </div>
+                    <div class="btn-hover-effect"></div>
+                </button>
+            </div>
+
+            <div class="change-name-hint">
+                <button id="change-profile-btn">İsmi Değiştir</button>
+            </div>
+        </div>
+
+        <!-- Success Overlay (Shown after click) -->
+        <div id="success-overlay" class="overlay hidden">
+            <div class="overlay-content">
+                <div class="checkmark">✓</div>
+                <h3>Kaydedildi!</h3>
+                <p>Afiyet olsun 😊</p>
+                <p class="timer-hint">Bu ekran <span id="timer-sec">3</span> saniye sonra kapanacak.</p>
+            </div>
+        </div>
+
+        <!-- Settings Modal (Google Sheet URL) -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Ayarlar</h3>
+                <p>Google Sheets Script URL'sini buraya yapıştırın:</p>
+                <input type="text" id="sheet-url-input" placeholder="https://script.google.com/macros/s/...">
+                <div class="modal-actions">
+                    <button id="close-settings" class="btn secondary-btn">Kapat</button>
+                    <button id="save-settings" class="btn primary-btn">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

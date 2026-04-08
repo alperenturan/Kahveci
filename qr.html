@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazdıralabilir QR Kod | Kahve Takip</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background: white; color: black; }
+        .print-container { border: 2px dashed #ccc; padding: 40px; display: inline-block; border-radius: 20px; }
+        h1 { margin-bottom: 5px; }
+        p { color: #666; margin-bottom: 30px; }
+        #qrcode { margin: 20px auto; display: flex; justify-content: center; }
+        .price-tag { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+        .btn-print { margin-top: 40px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .back-link { margin-top: 20px; display: block; color: #666; text-decoration: none; }
+        @media print { .btn-print, .back-link { display: none; } .print-container { border: none; } }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <h1>☕ Kahve Takibi</h1>
+        <p>Okut ve Kahveni Hemen Kaydet!</p>
+        
+        <div id="qrcode"></div>
+        
+        <div class="price-tag">
+            Sade: 40 TL | Sütlü: 50 TL
+        </div>
+    </div>
+
+    <br>
+    <button class="btn-print" onclick="window.print()">🖨️ Sayfayı Yazdır</button>
+    <a href="index.html" class="back-link">← Uygulamaya Dön</a>
+
+    <script>
+        // Get current URL but normalize it to index.html
+        let currentUrl = window.location.href.split('qr.html')[0] + 'index.html';
+        
+        new QRCode(document.getElementById("qrcode"), {
+            text: currentUrl,
+            width: 256,
+            height: 256,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+</html>
